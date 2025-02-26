@@ -1,0 +1,1081 @@
+-- Cerinta 4
+create sequence SEQ_CLIENT
+increment by 1 
+start with 1 
+maxvalue 99999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_ANGAJAT
+increment by 1 
+start with 1 
+maxvalue 9999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_SALARIU
+increment by 1 
+start with 1 
+maxvalue 999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_REZERVARE
+increment by 1 
+start with 1 
+maxvalue 999999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_PACHET_VACANTA
+increment by 1 
+start with 1 
+maxvalue 999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_SEDIU
+increment by 1 
+start with 1 
+maxvalue 9999999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_ADRESA
+increment by 1 
+start with 1 
+maxvalue 999999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_DEPARTAMENT
+increment by 1 
+start with 1 
+maxvalue 999999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_CAZARE
+increment by 1 
+start with 1 
+maxvalue 999999
+minvalue 1 
+nocycle 
+nocache; 
+
+create sequence SEQ_TRANSPORT
+increment by 1 
+start with 1 
+maxvalue 9999999
+minvalue 1 
+nocycle 
+nocache; 
+
+
+-- Tabel CLIENT
+CREATE TABLE CLIENT (
+  id_client NUMBER PRIMARY KEY,
+  nume VARCHAR2(30) NOT NULL,
+  prenume VARCHAR2(30) NOT NULL,
+  sex VARCHAR2(8) NOT NULL,
+  nr_tel CHAR(12) NOT NULL,
+  email VARCHAR2(50) NOT NULL,
+  data_n DATE NOT NULL
+);
+
+
+-- Tabel ANGAJAT
+CREATE TABLE ANGAJAT (
+  id_angajat NUMBER PRIMARY KEY,
+  nume VARCHAR2(30) NOT NULL,
+  prenume VARCHAR2(30) NOT NULL,
+  pozitie VARCHAR2(20) NOT NULL,
+  nr_tel CHAR(12) NOT NULL,
+  email VARCHAR2(50) NOT NULL,
+  data_angajare DATE NOT NULL,
+  id_sediu NUMBER NOT NULL,
+  id_departament NUMBER NOT NULL,
+  FOREIGN KEY (id_sediu) REFERENCES SEDIU(id_sediu),
+  FOREIGN KEY (id_departament) REFERENCES DEPARTAMENT(id_departament)
+);
+
+
+--Tabel SALARIU
+CREATE TABLE SALARIU (
+  id_ist_salariu NUMBER PRIMARY KEY,
+  data_modificare_salariu DATE NOT NULL,
+  suma NUMBER NOT NULL,
+  id_angajat NUMBER NOT NULL,
+  FOREIGN KEY (id_angajat) REFERENCES ANGAJAT(id_angajat)
+);
+
+
+-- Tabel REZERVARE
+CREATE TABLE REZERVARE (
+  id_rezervare NUMBER PRIMARY KEY,
+  nr_pers NUMBER NOT NULL,
+  data_rez DATE NOT NULL,
+  id_client NUMBER NOT NULL,
+  id_angajat NUMBER NOT NULL,
+  id_pachetvac NUMBER NOT NULL,
+  FOREIGN KEY (id_client) REFERENCES CLIENT(id_client),
+  FOREIGN KEY (id_angajat) REFERENCES ANGAJAT(id_angajat),
+  FOREIGN KEY (id_pachetvac) REFERENCES PACHET_VACANTA(id_pachetvac)
+);
+
+
+-- Tabel PACHET_VACANTA
+CREATE TABLE PACHET_VACANTA (
+  id_pachetvac NUMBER PRIMARY KEY,
+  destinatie VARCHAR2(20) NOT NULL,
+  oras_plecare VARCHAR2(20) NOT NULL,
+  durata NUMBER NOT NULL,
+  data_plecare DATE NOT NULL,
+  pret_sejur NUMBER NOT NULL,
+  id_transport NUMBER NOT NULL,
+  id_cazare NUMBER NOT NULL,
+  FOREIGN KEY (id_transport) REFERENCES TRANSPORT(id_transport),
+  FOREIGN KEY (id_cazare) REFERENCES CAZARE(id_cazare)
+);
+
+
+-- Tabel SEDIU
+CREATE TABLE SEDIU (
+  id_sediu NUMBER PRIMARY KEY,
+  nr_tel CHAR(12) NOT NULL,
+  email VARCHAR2(50) NOT NULL,
+  id_adresa NUMBER NOT NULL,
+  FOREIGN KEY (id_adresa) REFERENCES ADRESA(id_adresa)
+);
+
+
+-- Tabel ADRESA
+CREATE TABLE ADRESA (
+  id_adresa NUMBER PRIMARY KEY,
+  strada VARCHAR2(20) NOT NULL,
+  numar NUMBER NOT NULL,
+  oras VARCHAR2(20) NOT NULL,
+  tara VARCHAR2(20) NOT NULL,
+  cod_postal VARCHAR2(10) NOT NULL
+);
+
+
+-- Tabel DEPARTAMENT
+CREATE TABLE DEPARTAMENT (
+  id_departament NUMBER PRIMARY KEY,
+  denumire VARCHAR2(20) NOT NULL
+);
+
+
+-- Tabela CAZARE
+CREATE TABLE CAZARE (
+  id_cazare NUMBER PRIMARY KEY,
+  denumire VARCHAR2(20) NOT NULL,
+  nr_stele NUMBER NOT NULL,
+  nr_tel CHAR(12) NOT NULL,
+  email VARCHAR2(50) NOT NULL,
+  id_adresa NUMBER NOT NULL,
+  FOREIGN KEY (id_adresa) REFERENCES ADRESA(id_adresa)
+);
+
+
+-- Tabel TRANSPORT
+CREATE TABLE TRANSPORT (
+  id_transport NUMBER PRIMARY KEY,
+  tip_transport VARCHAR2(20) NOT NULL,
+  companie VARCHAR2(20) NOT NULL
+);
+
+
+--Cerinta 5
+-- Inserari TRANSPORT
+
+INSERT INTO TRANSPORT (id_transport, tip_transport, companie) VALUES (SEQ_TRANSPORT.NEXTVAL, 'Avion', 'BlueAir');
+INSERT INTO TRANSPORT (id_transport, tip_transport, companie) VALUES (SEQ_TRANSPORT.NEXTVAL, 'Autocar', 'EuroLines');
+INSERT INTO TRANSPORT (id_transport, tip_transport, companie) VALUES (SEQ_TRANSPORT.NEXTVAL, 'Tren', 'CFR');
+INSERT INTO TRANSPORT (id_transport, tip_transport, companie) VALUES (SEQ_TRANSPORT.NEXTVAL, 'Vapor', 'MSCruises');
+INSERT INTO TRANSPORT (id_transport, tip_transport, companie) VALUES (SEQ_TRANSPORT.NEXTVAL, 'Avion', 'Tarom');
+
+
+
+-- Inserari DEPARTAMENT
+
+INSERT INTO DEPARTAMENT (id_departament, denumire) VALUES (SEQ_DEPARTAMENT.NEXTVAL, 'Vânzari');
+INSERT INTO DEPARTAMENT (id_departament, denumire) VALUES (SEQ_DEPARTAMENT.NEXTVAL, 'Marketing');
+INSERT INTO DEPARTAMENT (id_departament, denumire) VALUES (SEQ_DEPARTAMENT.NEXTVAL, 'Rezervari');
+INSERT INTO DEPARTAMENT (id_departament, denumire) VALUES (SEQ_DEPARTAMENT.NEXTVAL, 'IT');
+INSERT INTO DEPARTAMENT (id_departament, denumire) VALUES (SEQ_DEPARTAMENT.NEXTVAL, 'Financiar');
+
+-- Inserari ADRESA
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Strada Victoriei', 10, 'București', 'România', '010101');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Strada Avram Iancu', 25, 'Cluj-Napoca', 'România', '400001');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Strada Trandafirilor', 5, 'Timișoara', 'România', '300001');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Strada Salcamilor', 15, 'Iași', 'România', '700001');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Strada Republicii', 8, 'Brașov', 'România', '500001');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Main Street', 20, 'New York', 'SUA', '10001');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Rue de la Paix', 10, 'Paris', 'Franța', '75001');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Kurfürstendamm', 15, 'Berlin', 'Germania', '10707');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Calle Gran Via', 30, 'Madrid', 'Spania', '28013');
+
+INSERT INTO ADRESA (id_adresa, strada, numar, oras, tara, cod_postal)
+VALUES (SEQ_ADRESA.NEXTVAL, 'Rua Augusta', 50, 'Lisabona', 'Portugalia', '110848');
+
+
+
+--Inserari CAZARE
+
+INSERT INTO CAZARE (id_cazare, denumire, nr_stele, nr_tel, email, id_adresa)
+VALUES (SEQ_CAZARE.NEXTVAL, 'Intercontinental', 4, '+40721234567', 'intercontinental@example.com', 6);
+
+INSERT INTO CAZARE (id_cazare, denumire, nr_stele, nr_tel, email, id_adresa)
+VALUES (SEQ_CAZARE.NEXTVAL, 'Marriott', 3, '+40721234568', 'marriott@example.com', 7);
+
+INSERT INTO CAZARE (id_cazare, denumire, nr_stele, nr_tel, email, id_adresa)
+VALUES (SEQ_CAZARE.NEXTVAL, 'Elite', 5, '+40721234569', 'elite@example.com', 8);
+
+INSERT INTO CAZARE (id_cazare, denumire, nr_stele, nr_tel, email, id_adresa)
+VALUES (SEQ_CAZARE.NEXTVAL, 'SunsetInn', 5, '+40721234570', 'sunsetinn@example.com', 9);
+
+INSERT INTO CAZARE (id_cazare, denumire, nr_stele, nr_tel, email, id_adresa)
+VALUES (SEQ_CAZARE.NEXTVAL, 'OceanView', 4, '+40721234571', 'oceanview@example.com', 10);
+
+-- Inserari SEDIU
+
+INSERT INTO SEDIU (id_sediu, nr_tel, email, id_adresa)
+VALUES (SEQ_SEDIU.NEXTVAL, '+40721234597', 'sediu1@example.com', 1);
+
+INSERT INTO SEDIU (id_sediu, nr_tel, email, id_adresa)
+VALUES (SEQ_SEDIU.NEXTVAL, '+40721234598', 'sediu2@example.com', 2);
+
+INSERT INTO SEDIU (id_sediu, nr_tel, email, id_adresa)
+VALUES (SEQ_SEDIU.NEXTVAL, '+40721234599', 'sediu3@example.com', 3);
+
+INSERT INTO SEDIU (id_sediu, nr_tel, email, id_adresa)
+VALUES (SEQ_SEDIU.NEXTVAL, '+40721234590', 'sediu4@example.com', 4);
+
+INSERT INTO SEDIU (id_sediu, nr_tel, email, id_adresa)
+VALUES (SEQ_SEDIU.NEXTVAL, '+40721234591', 'sediu5@example.com', 5);
+
+
+
+-- Inserari PACHET_VACANTA
+
+INSERT INTO Pachet_vacanta (id_pachetvac, destinatie, oras_plecare, durata, data_plecare, pret_sejur, id_transport, id_cazare)
+VALUES (SEQ_PACHET_VACANTA.NEXTVAL, 'New York', 'Bucuresti', 7, TO_DATE('2023-06-01', 'YYYY-MM-DD'), 8000, 1, 1);
+
+INSERT INTO Pachet_vacanta (id_pachetvac, destinatie, oras_plecare, durata, data_plecare, pret_sejur, id_transport, id_cazare)
+VALUES (SEQ_PACHET_VACANTA.NEXTVAL, 'Paris', 'Cluj-Napoca', 5, TO_DATE('2023-07-10', 'YYYY-MM-DD'), 3500, 2, 2);
+
+INSERT INTO Pachet_vacanta (id_pachetvac, destinatie, oras_plecare, durata, data_plecare, pret_sejur, id_transport, id_cazare)
+VALUES (SEQ_PACHET_VACANTA.NEXTVAL, 'Berlin', 'Timisoara', 3, TO_DATE('2023-08-20', 'YYYY-MM-DD'), 3000, 3, 3);
+
+INSERT INTO Pachet_vacanta (id_pachetvac, destinatie, oras_plecare, durata, data_plecare, pret_sejur, id_transport, id_cazare)
+VALUES (SEQ_PACHET_VACANTA.NEXTVAL, 'Madrid', 'Iasi', 6, TO_DATE('2023-09-15', 'YYYY-MM-DD'), 4500, 5, 4);
+
+INSERT INTO Pachet_vacanta (id_pachetvac, destinatie, oras_plecare, durata, data_plecare, pret_sejur, id_transport, id_cazare)
+VALUES (SEQ_PACHET_VACANTA.NEXTVAL, 'Lisabona', 'Constanta', 4, TO_DATE('2023-10-05', 'YYYY-MM-DD'), 6000, 4, 5);
+
+
+
+-- Inserari CLIENT
+
+INSERT INTO Client (id_client, nume, prenume, sex, nr_tel, email, data_n)
+VALUES (SEQ_CLIENT.NEXTVAL, 'Popescu', 'Ion', 'Masculin', '+40771234567', 'ion.popescu@example.com', TO_DATE('1990-05-10', 'YYYY-MM-DD'));
+
+INSERT INTO Client (id_client, nume, prenume, sex, nr_tel, email, data_n)
+VALUES (SEQ_CLIENT.NEXTVAL, 'Ionescu', 'Maria', 'Feminin', '+40731234567', 'maria.ionescu@example.com', TO_DATE('1985-12-20', 'YYYY-MM-DD'));
+
+INSERT INTO Client (id_client, nume, prenume, sex, nr_tel, email, data_n)
+VALUES (SEQ_CLIENT.NEXTVAL, 'Popa', 'Andrei', 'Masculin', '+40741234567', 'andrei.popa@example.com', TO_DATE('1992-08-05', 'YYYY-MM-DD'));
+
+INSERT INTO Client (id_client, nume, prenume, sex, nr_tel, email, data_n)
+VALUES (SEQ_CLIENT.NEXTVAL, 'Georgescu', 'Elena', 'Feminin', '+40751234567', 'elena.georgescu@example.com', TO_DATE('1988-03-15', 'YYYY-MM-DD'));
+
+INSERT INTO Client (id_client, nume, prenume, sex, nr_tel, email, data_n)
+VALUES (SEQ_CLIENT.NEXTVAL, 'Mihai', 'Alexandru', 'Masculin', '+40761234567', 'alexandru.mihai@example.com', TO_DATE('1995-10-25', 'YYYY-MM-DD'));
+
+
+
+-- Inserari ANGAJAT
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Dumitrescu', 'Maria', 'Manager de turism', '+40751234568', 'maria.dumitrescu@example.com', TO_DATE('2017-04-05', 'YYYY-MM-DD'), 3, 3);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Constantin', 'Alexandru', 'Consultant turism', '+40723214567', 'alexandru.constantin@example.com', TO_DATE('2022-05-20', 'YYYY-MM-DD'), 4, 1);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Popovici', 'Elena', 'Agent de turism', '+40729786543', 'elena.popovici@example.com', TO_DATE('2021-06-12', 'YYYY-MM-DD'), 2, 3);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Stancu', 'Cristian', 'Agent de turism', '+40728675432', 'cristian.stancu@example.com', TO_DATE('2020-07-09', 'YYYY-MM-DD'), 5, 3);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Stanescu', 'Andreea', 'Ghid turistic', '+40725456789', 'andreea.stanescu@example.com', TO_DATE('2020-08-16', 'YYYY-MM-DD'), 3, 2);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Georgescu', 'Marius', 'Contabil', '+40721123456', 'marius.georgescu@example.com', TO_DATE('2022-09-27', 'YYYY-MM-DD'), 1, 5);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Popov', 'Elena', 'Consultant turism', '+40728987654', 'elena.popov@example.com', TO_DATE('2018-10-18', 'YYYY-MM-DD'), 2, 1);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Munteanu', 'Adrian', 'Agent de turism', '+40728765432', 'adrian.munteanu@example.com', TO_DATE('2019-11-09', 'YYYY-MM-DD'), 1, 3);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_ANGAJAT.NEXTVAL, 'Diaconu', 'Roxana', 'Programator', '+40721134567', 'roxana.diaconu@example.com', TO_DATE('2022-12-20', 'YYYY-MM-DD'), 3, 4);
+
+INSERT INTO Angajat (id_angajat, nume, prenume, pozitie, nr_tel, email, data_angajare, id_sediu, id_departament)
+VALUES (SEQ_angajat.NEXTVAL, 'Dumitru', 'Alexandru', 'Programator', '+40723219876', 'alexandru.dumitru@example.com', TO_DATE('2021-08-10', 'YYYY-MM-DD'), 3, 4);
+
+
+
+-- Inserari SALARIU
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2017-04-05', 'YYYY-MM-DD'), 5000, 1);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2022-05-20', 'YYYY-MM-DD'), 3500, 2);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2021-06-12', 'YYYY-MM-DD'), 2700, 3);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2020-07-09', 'YYYY-MM-DD'), 3000, 4);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2020-08-16', 'YYYY-MM-DD'), 2900, 5);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2022-09-27', 'YYYY-MM-DD'), 3000, 6);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2018-10-18', 'YYYY-MM-DD'), 3100, 7);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2019-11-09', 'YYYY-MM-DD'), 3200, 8);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2022-12-20', 'YYYY-MM-DD'), 3300, 9);
+
+INSERT INTO Salariu (id_ist_salariu, data_modificare_salariu, suma, id_angajat)
+VALUES (SEQ_SALARIU.NEXTVAL, TO_DATE('2021-08-10', 'YYYY-MM-DD'), 3400, 10);
+
+
+
+-- Inserari REZERVARE
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 2, TO_DATE('2022-01-05', 'YYYY-MM-DD'), 1, 3, 1);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 1, TO_DATE('2021-02-10', 'YYYY-MM-DD'), 2, 4, 2);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 3, TO_DATE('2022-03-15', 'YYYY-MM-DD'), 3, 3, 3);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 2, TO_DATE('2023-04-20', 'YYYY-MM-DD'), 4, 8, 4);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 1, TO_DATE('2023-05-25', 'YYYY-MM-DD'), 5, 4, 5);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 4, TO_DATE('2022-06-30', 'YYYY-MM-DD'), 2, 4, 2);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 3, TO_DATE('2020-07-05', 'YYYY-MM-DD'), 3, 8, 5);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 2, TO_DATE('2022-08-10', 'YYYY-MM-DD'), 5, 3, 1);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 1, TO_DATE('2023-02-15', 'YYYY-MM-DD'), 1, 3, 4);
+
+INSERT INTO Rezervare (id_rezervare, nr_pers, data_rez, id_client, id_angajat, id_pachetvac)
+VALUES (SEQ_REZERVARE.NEXTVAL, 2, TO_DATE('2022-10-20', 'YYYY-MM-DD'), 4, 8, 1);
+
+
+--Cerinta 6
+CREATE OR REPLACE PROCEDURE afisare_informatii_rezervare(
+    p_id_rezervare IN NUMBER
+) AS
+    v_data_rez DATE;
+    v_nr_pers NUMBER;
+
+    -- Folosirea tablourilor imbricate (NESTED TABLES) pentru detaliile pachetului de vacanta
+    TYPE DetaliiPachetTable IS TABLE OF Pachet_vacanta%ROWTYPE;
+    v_detalii_pachet DetaliiPachetTable := DetaliiPachetTable();
+
+    -- Folosirea tablourilor indexate (INDEX BY TABLES) pentru detaliile rezervarii
+    TYPE DetaliiRezervareIndexByTable IS TABLE OF Rezervare%ROWTYPE INDEX BY PLS_INTEGER;
+    v_detalii_rezervare DetaliiRezervareIndexByTable;
+
+    -- Folosirea vectorilor (VARRAYS) pentru detaliile clientului
+    TYPE DetaliiClientVarray IS VARRAY(5) OF Client%ROWTYPE;
+    v_detalii_client DetaliiClientVarray := DetaliiClientVarray();
+
+BEGIN
+    -- Obtine informatii despre rezervare
+    SELECT data_rez, nr_pers
+    INTO v_data_rez, v_nr_pers
+    FROM Rezervare
+    WHERE id_rezervare = p_id_rezervare;
+
+    -- Obtine informatii despre pachetul de vacanta din rezervare folosind tablourile imbricate (NESTED TABLES)
+    SELECT p.*
+    BULK COLLECT INTO v_detalii_pachet
+    FROM Pachet_vacanta p
+    WHERE p.id_pachetvac = (SELECT id_pachetvac FROM Rezervare WHERE id_rezervare = p_id_rezervare);
+
+    -- Obtine informatii despre rezervare folosind tablourile indexate (INDEX BY TABLES)
+    SELECT r.*
+    INTO v_detalii_rezervare(1)
+    FROM Rezervare r
+    WHERE r.id_rezervare = p_id_rezervare;
+
+    -- Obtine informatii despre client folosind vectorii (VARRAYS)
+    SELECT c.*
+    BULK COLLECT INTO v_detalii_client
+    FROM Client c
+    WHERE c.id_client = (SELECT id_client FROM Rezervare WHERE id_rezervare = p_id_rezervare);
+
+    -- Afiseaza informatii despre rezervare folosind tablourile indexate (INDEX BY TABLES)
+    DBMS_OUTPUT.PUT_LINE('Detalii rezervare:');
+    DBMS_OUTPUT.PUT_LINE('  Numar persoane: ' || v_detalii_rezervare(1).nr_pers);
+    DBMS_OUTPUT.PUT_LINE('  Data rezervare: ' || TO_CHAR(v_detalii_rezervare(1).data_rez, 'YYYY-MM-DD'));
+    -- Afiseaza informatii despre pachet folosind tablourile imbricate (NESTED TABLES)
+    FOR i IN 1..v_detalii_pachet.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE('Detalii pachet:');
+        DBMS_OUTPUT.PUT_LINE('  Destinatie: ' || v_detalii_pachet(i).destinatie);
+        DBMS_OUTPUT.PUT_LINE('  Oras plecare: ' || v_detalii_pachet(i).oras_plecare);
+        DBMS_OUTPUT.PUT_LINE('  Durata: ' || v_detalii_pachet(i).durata || ' zile');
+        DBMS_OUTPUT.PUT_LINE('  Data plecare: ' || TO_CHAR(v_detalii_pachet(i).data_plecare, 'YYYY-MM-DD'));
+        DBMS_OUTPUT.PUT_LINE('  Pret sejur: ' || v_detalii_pachet(i).pret_sejur);
+    END LOOP;
+
+    -- Afiseaza informatii despre client folosind vectorii (VARRAYS)
+    FOR i IN 1..v_detalii_client.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE('Detalii client care a efectuat rezervarea:');
+        DBMS_OUTPUT.PUT_LINE('  Nume: ' || v_detalii_client(i).nume);
+        DBMS_OUTPUT.PUT_LINE('  Prenume: ' || v_detalii_client(i).prenume);
+        DBMS_OUTPUT.PUT_LINE('  Sex: ' || v_detalii_client(i).sex);
+        DBMS_OUTPUT.PUT_LINE('  Numar de telefon: ' || v_detalii_client(i).nr_tel);
+        DBMS_OUTPUT.PUT_LINE('  Email: ' || v_detalii_client(i).email);
+        DBMS_OUTPUT.PUT_LINE('  Data nastere: ' || TO_CHAR(v_detalii_client(i).data_n, 'YYYY-MM-DD'));
+    END LOOP;
+END;
+/
+
+DECLARE
+    v_id_rezervare NUMBER := 3;
+BEGIN
+    afisare_informatii_rezervare(p_id_rezervare => v_id_rezervare);
+END; 
+/
+
+
+--Cerinta 7
+CREATE OR REPLACE PROCEDURE detalii_rezervari (
+    p_data_inceput IN DATE,
+    p_data_sfarsit IN DATE
+) AS
+    -- Cursor clasic pentru a obține rezervările în intervalul de date specificat
+    CURSOR cur_rezervari_clasic IS
+        SELECT id_rezervare, id_client, data_rez
+        FROM rezervare
+        WHERE data_rez BETWEEN p_data_inceput AND p_data_sfarsit;
+
+    -- Cursor parametrizat pentru a obține detalii suplimentare despre fiecare rezervare
+    CURSOR cur_detalii_rezervare (p_id_rezervare NUMBER) IS
+        SELECT r.id_rezervare, c.nume, c.prenume, p.destinatie, p.pret_sejur, r.data_rez
+        FROM rezervare r
+        JOIN client c ON r.id_client = c.id_client
+        JOIN pachet_vacanta p ON r.id_pachetvac = p.id_pachetvac
+        WHERE r.id_rezervare = p_id_rezervare;
+
+    -- Variabile pentru stocarea rezultatelor
+    v_id_rezervare NUMBER;
+    v_nume_client VARCHAR2(30);
+    v_prenume_client VARCHAR2(30);
+    v_destinatie VARCHAR2(20);
+    v_pret_sejur NUMBER;    
+    v_data_rez DATE;
+
+BEGIN
+    -- Deschidem cursorul clasic și iterăm prin rezervări
+    FOR rez IN cur_rezervari_clasic LOOP
+        v_id_rezervare := rez.id_rezervare;
+
+        -- Deschidem cursorul parametrizat și obținem detalii despre rezervare
+        FOR detalii IN cur_detalii_rezervare(v_id_rezervare) LOOP
+            v_nume_client := detalii.nume;
+            v_prenume_client := detalii.prenume;
+            v_destinatie := detalii.destinatie;
+            v_pret_sejur := detalii.pret_sejur;
+            v_data_rez := detalii.data_rez;
+
+            -- Afișăm sau stocăm rezultatele cum este necesar
+            DBMS_OUTPUT.PUT_LINE('Rezervare ID: ' || v_id_rezervare);
+            DBMS_OUTPUT.PUT_LINE('Data rezervare: ' || v_data_rez);
+            DBMS_OUTPUT.PUT_LINE('Nume client: ' || v_nume_client || ' ' || v_prenume_client);
+            DBMS_OUTPUT.PUT_LINE('Destinatie: ' || v_destinatie);
+            DBMS_OUTPUT.PUT_LINE('Pret sejur: ' || v_pret_sejur);
+            DBMS_OUTPUT.PUT_LINE('-------------------');
+        END LOOP;
+    END LOOP;
+
+END detalii_rezervari;
+/
+
+-- Declaram variabile pentru perioada de cautare
+DECLARE
+    v_data_inceput DATE := TO_DATE('2022-01-01', 'YYYY-MM-DD');
+    v_data_sfarsit DATE := TO_DATE('2022-03-20', 'YYYY-MM-DD');
+BEGIN
+    -- Apelăm subprogramul cu valorile definite
+    detalii_rezervari(v_data_inceput, v_data_sfarsit);
+END;
+/
+
+
+--Cerinta 8
+CREATE OR REPLACE FUNCTION detalii_pachet_vacanta (
+  id_pachet_param IN NUMBER
+) RETURN VARCHAR2
+IS
+  v_cursor SYS_REFCURSOR;
+  v_id_pachet NUMBER;
+  v_destinatie VARCHAR2(20);
+  v_denumire_cazare VARCHAR2(20);
+  v_nr_stele_cazare NUMBER;
+  v_tara VARCHAR2(20);
+  v_oras VARCHAR2(20);
+  v_strada VARCHAR2(20);
+  v_numar NUMBER;
+  NO_ID_FOUND EXCEPTION;
+  TOO_FEW_STARS EXCEPTION;
+BEGIN
+  OPEN v_cursor FOR
+    SELECT pv.id_pachetvac, pv.destinatie, c.denumire, c.nr_stele, a.tara, a.oras, a.strada, a.numar
+    FROM PACHET_VACANTA pv
+    JOIN CAZARE c ON pv.id_cazare = c.id_cazare
+    JOIN ADRESA a ON c.id_adresa = a.id_adresa
+    WHERE pv.id_pachetvac = id_pachet_param;
+
+  FETCH v_cursor INTO v_id_pachet, v_destinatie, v_denumire_cazare, v_nr_stele_cazare, v_tara, v_oras, v_strada, v_numar;
+
+  IF v_cursor%NOTFOUND THEN
+    CLOSE v_cursor;
+    RAISE NO_ID_FOUND;
+  END IF;
+
+  IF v_nr_stele_cazare <= 3 THEN
+    CLOSE v_cursor;
+    RAISE TOO_FEW_STARS;
+  END IF;
+
+  CLOSE v_cursor;
+    
+  RETURN 'Detalii pachet de vacanta ID ' || v_id_pachet || ':' || CHR(10) || 
+  'Destinatie: ' || v_destinatie || CHR(10) || 
+  'Cazare: ' || v_denumire_cazare || ' - ' || v_nr_stele_cazare || ' stele' || CHR(10) || 
+  'Adresa: ' || v_tara || ', ' || v_oras || ', ' || v_strada || ' ' || v_numar;
+
+  EXCEPTION
+    WHEN NO_ID_FOUND THEN
+      RETURN 'Nu s-a gasit niciun pachet de vacanta pentru ID-ul specificat.';
+    WHEN TOO_FEW_STARS THEN
+      RETURN'S-a gasit pachetul, dar cazarea are 3 sau mai putine stele!';
+    WHEN OTHERS THEN
+      RETURN 'O eroare necunoscuta a aparut.';
+END detalii_pachet_vacanta;
+/
+
+DECLARE
+    v_mesaj VARCHAR2(200);
+BEGIN
+    v_mesaj := detalii_pachet_vacanta(1);
+    DBMS_OUTPUT.PUT_LINE(v_mesaj);
+END;
+/
+
+--Apel pentru exceptia proprie NO_ID_FOUND
+DECLARE
+    v_mesaj VARCHAR2(200);
+BEGIN
+    v_mesaj := detalii_pachet_vacanta(6);
+    DBMS_OUTPUT.PUT_LINE(v_mesaj);
+END;
+/
+
+--Apel pentru exceptia proprie TOO_FEW_STARS
+DECLARE
+    v_mesaj VARCHAR2(200);
+BEGIN
+    v_mesaj := detalii_pachet_vacanta(2);
+    DBMS_OUTPUT.PUT_LINE(v_mesaj);
+END;
+/
+
+
+--Cerinta 9
+CREATE OR REPLACE PROCEDURE detalii_pachet_vacanta_angajati (
+  id_pachet_param IN NUMBER
+)
+IS
+  TYPE EmpList IS TABLE OF NUMBER;
+  v_id_pachet PACHET_VACANTA.id_pachetvac%TYPE;
+  v_destinatie PACHET_VACANTA.destinatie%TYPE;
+  v_denumire_cazare CAZARE.denumire%TYPE;
+  v_nr_stele_cazare CAZARE.nr_stele%TYPE;
+  v_tara ADRESA.tara%TYPE;
+  v_oras ADRESA.oras%TYPE;
+  v_strada ADRESA.strada%TYPE;
+  v_numar ADRESA.numar%TYPE;
+  v_displayed_emp EmpList := EmpList(); -- Nested table pentru a contoriza angajatii
+  v_numar_inregistrari NUMBER := 0;
+
+BEGIN
+  -- Initializare variabile pentru detalii pachet
+  v_id_pachet := NULL;
+  v_destinatie := NULL;
+  v_denumire_cazare := NULL;
+  v_nr_stele_cazare := NULL;
+  v_tara := NULL;
+  v_oras := NULL;
+  v_strada := NULL;
+  v_numar := NULL;
+
+  -- Utilizăm cele cinci tabele într-o singură comandă SQL
+  FOR rec IN (
+    SELECT pv.id_pachetvac, pv.destinatie, c.denumire, c.nr_stele, a.tara, a.oras, a.strada, a.numar, ang.id_angajat, ang.nume, ang.prenume
+    FROM PACHET_VACANTA pv
+    JOIN CAZARE c ON pv.id_cazare = c.id_cazare
+    JOIN ADRESA a ON c.id_adresa = a.id_adresa
+    JOIN REZERVARE r ON pv.id_pachetvac = r.id_pachetvac
+    JOIN ANGAJAT ang ON r.id_angajat = ang.id_angajat
+    WHERE pv.id_pachetvac = id_pachet_param
+    ORDER BY ang.id_angajat 
+  ) LOOP
+    -- Afișăm detalii despre pachet doar o singură dată
+    IF v_id_pachet IS NULL THEN
+      v_id_pachet := rec.id_pachetvac;
+      v_destinatie := rec.destinatie;
+      v_denumire_cazare := rec.denumire;
+      v_nr_stele_cazare := rec.nr_stele;
+      v_tara := rec.tara;
+      v_oras := rec.oras;
+      v_strada := rec.strada;
+      v_numar := rec.numar;
+
+      DBMS_OUTPUT.PUT_LINE('Detalii pachet de vacanta ID ' || v_id_pachet || ':');
+      DBMS_OUTPUT.PUT_LINE('Destinatie: ' || v_destinatie);
+      DBMS_OUTPUT.PUT_LINE('Cazare: ' || v_denumire_cazare || ' - ' || v_nr_stele_cazare || ' stele');
+      DBMS_OUTPUT.PUT_LINE('Adresa: ' || v_tara || ', ' || v_oras || ', ' || v_strada || ' ' || v_numar || CHR(10));
+      DBMS_OUTPUT.PUT_LINE('Angajatii care au efectuat rezervari cu pachetul de vacanta ID ' || v_id_pachet || ':');
+    END IF;
+    
+    -- Afișăm informațiile despre angajat doar dacă nu a fost deja afișat
+    IF NOT v_displayed_emp.EXISTS(v_displayed_emp.LAST) OR v_displayed_emp(v_displayed_emp.LAST) <> rec.id_angajat THEN
+      v_numar_inregistrari := v_numar_inregistrari + 1;
+      DBMS_OUTPUT.PUT_LINE('Angajat ID ' || rec.id_angajat || ': ' || rec.nume || ' ' || rec.prenume);
+      v_displayed_emp.EXTEND;
+      v_displayed_emp(v_displayed_emp.LAST) := rec.id_angajat; 
+    END IF;
+    
+  END LOOP;
+  
+     -- Verificăm dacă s-au găsit înregistrări
+  IF v_id_pachet IS NULL THEN
+    RAISE NO_DATA_FOUND;
+  END IF;
+
+
+   -- Verificăm dacă s-au găsit prea multe înregistrări
+  IF v_numar_inregistrari > 1 THEN
+    RAISE TOO_MANY_ROWS;
+  END IF;
+  
+
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    DBMS_OUTPUT.PUT_LINE('Nu s-au gasit detalii pentru pachetul de vacanta cu ID-ul specificat.');
+  WHEN TOO_MANY_ROWS THEN
+    DBMS_OUTPUT.PUT_LINE('Mai mult de o rezervare gasita pentru pachetul de vacanta cu ID-ul specificat.');
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('O eroare necunoscută a apărut: ' || SQLERRM);
+END detalii_pachet_vacanta_angajati;
+/
+
+DECLARE
+BEGIN
+  detalii_pachet_vacanta_angajati(2); 
+END;
+/
+
+
+--Apel pentru exceptia NO_DATA_FOUND
+DECLARE
+BEGIN
+    detalii_pachet_vacanta_angajati(6);
+
+END;
+/
+
+--Apel pentru exceptia TOO_MANY ROWS
+DECLARE
+BEGIN
+    detalii_pachet_vacanta_angajati(1);
+END;
+/
+
+--Cerinta 10
+CREATE OR REPLACE TRIGGER trg_prevent_delete_new_york
+BEFORE DELETE ON PACHET_VACANTA
+DECLARE
+  v_count NUMBER;
+BEGIN
+  -- Verificăm dacă există înregistrări cu destinația "New York" care urmează să fie șterse
+  SELECT COUNT(*)
+  INTO v_count
+  FROM PACHET_VACANTA
+  WHERE destinatie = 'New York';
+
+  -- Dacă există astfel de înregistrări, anulăm operația DELETE și afișăm un mesaj de eroare
+  IF v_count > 0 THEN
+    RAISE_APPLICATION_ERROR(-20001, 'Stergerea pachetelor de vacanta cu destinatia "New York" este interzisa!');
+  END IF;
+END trg_prevent_delete_new_york;
+/
+
+delete from pachet_vacanta where destinatie = 'New York';
+
+
+--Cerinta 11
+CREATE OR REPLACE TRIGGER TRG_UPDATE_PRET_SEJUR
+BEFORE UPDATE ON PACHET_VACANTA
+FOR EACH ROW
+DECLARE
+  v_durata_veche NUMBER;
+  v_durata_noua NUMBER;
+  v_pret_vechi NUMBER;
+BEGIN
+
+  v_durata_veche := :OLD.durata;
+  v_durata_noua := :NEW.durata;
+  v_pret_vechi := :OLD.pret_sejur;
+
+  IF v_durata_noua <> v_durata_veche THEN
+    DECLARE
+      v_diferenta_durata NUMBER;
+    BEGIN
+      v_diferenta_durata := v_durata_noua - v_durata_veche;
+
+      :NEW.pret_sejur := :NEW.pret_sejur + (v_diferenta_durata * (v_pret_vechi * 0.1));
+    END;
+  END IF;
+END;
+/
+ 
+
+UPDATE PACHET_VACANTA
+SET durata = 5
+WHERE id_pachetvac = 5;
+
+
+--Cerinta 12
+CREATE OR REPLACE TRIGGER trg_prevent_drop_rezervari
+BEFORE DROP ON SCHEMA
+DECLARE
+    v_object_name VARCHAR2(30);
+BEGIN
+    v_object_name := ora_dict_obj_name;
+
+    IF ora_dict_obj_type = 'TABLE' AND v_object_name = 'REZERVARE' THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Nu este permisa stergerea tabelei REZERVARE.');
+    END IF;
+END;
+/
+DROP TABLE REZERVARE;
+
+--Cerinta 13
+CREATE OR REPLACE PACKAGE PACHET_TURISM AS
+  PROCEDURE afisare_informatii_rezervare(p_id_rezervare IN NUMBER);
+  PROCEDURE detalii_rezervari(p_data_inceput IN DATE, p_data_sfarsit IN DATE);
+  FUNCTION detalii_pachet_vacanta(id_pachet_param IN NUMBER) RETURN VARCHAR2;
+  PROCEDURE detalii_pachet_vacanta_angajati(id_pachet_param IN NUMBER);
+
+END PACHET_TURISM;
+/
+
+CREATE OR REPLACE PACKAGE BODY PACHET_TURISM AS 
+
+-- PROBLEMA 6
+  PROCEDURE afisare_informatii_rezervare(p_id_rezervare IN NUMBER) AS
+    v_data_rez DATE;
+    v_nr_pers NUMBER;
+
+    -- Folosirea tablourilor imbricate (NESTED TABLES) pentru detaliile pachetului de vacanta
+    TYPE DetaliiPachetTable IS TABLE OF Pachet_vacanta%ROWTYPE;
+    v_detalii_pachet DetaliiPachetTable;
+
+    -- Folosirea tablourilor indexate (INDEX BY TABLES) pentru detaliile rezervarii
+    TYPE DetaliiRezervareIndexByTable IS TABLE OF Rezervare%ROWTYPE INDEX BY PLS_INTEGER;
+    v_detalii_rezervare DetaliiRezervareIndexByTable;
+
+    -- Folosirea vectorilor (VARRAYS) pentru detaliile clientului
+    TYPE DetaliiClientVarray IS VARRAY(5) OF Client%ROWTYPE;
+    v_detalii_client DetaliiClientVarray := DetaliiClientVarray();
+
+BEGIN
+    -- Obtine informatii despre rezervare
+    SELECT data_rez, nr_pers
+    INTO v_data_rez, v_nr_pers
+    FROM Rezervare
+    WHERE id_rezervare = p_id_rezervare;
+
+    -- Obtine informatii despre pachetul de vacanta din rezervare folosind tablourile imbricate (NESTED TABLES)
+    SELECT p.*
+    BULK COLLECT INTO v_detalii_pachet
+    FROM Pachet_vacanta p
+    WHERE p.id_pachetvac = (SELECT id_pachetvac FROM Rezervare WHERE id_rezervare = p_id_rezervare);
+
+    -- Obtine informatii despre rezervare folosind tablourile indexate (INDEX BY TABLES)
+    SELECT r.*
+    INTO v_detalii_rezervare(1)
+    FROM Rezervare r
+    WHERE r.id_rezervare = p_id_rezervare;
+
+    -- Obtine informatii despre client folosind vectorii (VARRAYS)
+    SELECT c.*
+    BULK COLLECT INTO v_detalii_client
+    FROM Client c
+    WHERE c.id_client = (SELECT id_client FROM Rezervare WHERE id_rezervare = p_id_rezervare);
+
+    -- Afiseaza informatii despre rezervare folosind tablourile indexate (INDEX BY TABLES)
+    DBMS_OUTPUT.PUT_LINE('Detalii rezervare:');
+    DBMS_OUTPUT.PUT_LINE('  Numar persoane: ' || v_detalii_rezervare(1).nr_pers);
+    DBMS_OUTPUT.PUT_LINE('  Data rezervare: ' || TO_CHAR(v_detalii_rezervare(1).data_rez, 'YYYY-MM-DD'));
+    -- Afiseaza informatii despre pachet folosind tablourile imbricate (NESTED TABLES)
+    FOR i IN 1..v_detalii_pachet.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE('Detalii pachet:');
+        DBMS_OUTPUT.PUT_LINE('  Destinatie: ' || v_detalii_pachet(i).destinatie);
+        DBMS_OUTPUT.PUT_LINE('  Oras plecare: ' || v_detalii_pachet(i).oras_plecare);
+        DBMS_OUTPUT.PUT_LINE('  Durata: ' || v_detalii_pachet(i).durata || ' zile');
+        DBMS_OUTPUT.PUT_LINE('  Data plecare: ' || TO_CHAR(v_detalii_pachet(i).data_plecare, 'YYYY-MM-DD'));
+        DBMS_OUTPUT.PUT_LINE('  Pret sejur: ' || v_detalii_pachet(i).pret_sejur);
+    END LOOP;
+
+    -- Afiseaza informatii despre client folosind vectorii (VARRAYS)
+    FOR i IN 1..v_detalii_client.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE('Detalii client care a efectuat rezervarea:');
+        DBMS_OUTPUT.PUT_LINE('  Nume: ' || v_detalii_client(i).nume);
+        DBMS_OUTPUT.PUT_LINE('  Prenume: ' || v_detalii_client(i).prenume);
+        DBMS_OUTPUT.PUT_LINE('  Sex: ' || v_detalii_client(i).sex);
+        DBMS_OUTPUT.PUT_LINE('  Numar de telefon: ' || v_detalii_client(i).nr_tel);
+        DBMS_OUTPUT.PUT_LINE('  Email: ' || v_detalii_client(i).email);
+        DBMS_OUTPUT.PUT_LINE('  Data nastere: ' || TO_CHAR(v_detalii_client(i).data_n, 'YYYY-MM-DD'));
+    END LOOP;
+END;
+
+-- PROBLEMA 7
+  PROCEDURE detalii_rezervari(p_data_inceput IN DATE, p_data_sfarsit IN DATE) AS
+   -- Cursor clasic pentru a obține rezervările în intervalul de date specificat
+    CURSOR cur_rezervari_clasic IS
+        SELECT id_rezervare, id_client, data_rez
+        FROM rezervare
+        WHERE data_rez BETWEEN p_data_inceput AND p_data_sfarsit;
+
+    -- Cursor parametrizat pentru a obține detalii suplimentare despre fiecare rezervare
+    CURSOR cur_detalii_rezervare (p_id_rezervare NUMBER) IS
+        SELECT r.id_rezervare, c.nume, c.prenume, p.destinatie, p.pret_sejur, r.data_rez
+        FROM rezervare r
+        JOIN client c ON r.id_client = c.id_client
+        JOIN pachet_vacanta p ON r.id_pachetvac = p.id_pachetvac
+        WHERE r.id_rezervare = p_id_rezervare;
+
+    -- Variabile pentru stocarea rezultatelor
+    v_id_rezervare NUMBER;
+    v_nume_client VARCHAR2(30);
+    v_prenume_client VARCHAR2(30);
+    v_destinatie VARCHAR2(20);
+    v_pret_sejur NUMBER;    
+    v_data_rez DATE;
+
+BEGIN
+    -- Deschidem cursorul clasic și iterăm prin rezervări
+    FOR rez IN cur_rezervari_clasic LOOP
+        v_id_rezervare := rez.id_rezervare;
+
+        -- Deschidem cursorul parametrizat și obținem detalii despre rezervare
+        FOR detalii IN cur_detalii_rezervare(v_id_rezervare) LOOP
+            v_nume_client := detalii.nume;
+            v_prenume_client := detalii.prenume;
+            v_destinatie := detalii.destinatie;
+            v_pret_sejur := detalii.pret_sejur;
+            v_data_rez := detalii.data_rez;
+
+            -- Afișăm sau stocăm rezultatele cum este necesar
+            DBMS_OUTPUT.PUT_LINE('Rezervare ID: ' || v_id_rezervare);
+            DBMS_OUTPUT.PUT_LINE('Data rezervare: ' || v_data_rez);
+            DBMS_OUTPUT.PUT_LINE('Nume client: ' || v_nume_client || ' ' || v_prenume_client);
+            DBMS_OUTPUT.PUT_LINE('Destinatie: ' || v_destinatie);
+            DBMS_OUTPUT.PUT_LINE('Pret sejur: ' || v_pret_sejur);
+            DBMS_OUTPUT.PUT_LINE('-------------------');
+        END LOOP;
+    END LOOP;
+
+END detalii_rezervari;
+
+-- PROBLEMA 8
+  FUNCTION detalii_pachet_vacanta (
+  id_pachet_param IN NUMBER
+) RETURN VARCHAR2
+IS
+  v_cursor SYS_REFCURSOR;
+  v_id_pachet NUMBER;
+  v_destinatie VARCHAR2(20);
+  v_denumire_cazare VARCHAR2(20);
+  v_nr_stele_cazare NUMBER;
+  v_tara VARCHAR2(20);
+  v_oras VARCHAR2(20);
+  v_strada VARCHAR2(20);
+  v_numar NUMBER;
+  NO_ID_FOUND EXCEPTION;
+  TOO_FEW_STARS EXCEPTION;
+BEGIN
+  OPEN v_cursor FOR
+    SELECT pv.id_pachetvac, pv.destinatie, c.denumire, c.nr_stele, a.tara, a.oras, a.strada, a.numar
+    FROM PACHET_VACANTA pv
+    JOIN CAZARE c ON pv.id_cazare = c.id_cazare
+    JOIN ADRESA a ON c.id_adresa = a.id_adresa
+    WHERE pv.id_pachetvac = id_pachet_param;
+
+  FETCH v_cursor INTO v_id_pachet, v_destinatie, v_denumire_cazare, v_nr_stele_cazare, v_tara, v_oras, v_strada, v_numar;
+
+  IF v_cursor%NOTFOUND THEN
+    CLOSE v_cursor;
+    RAISE NO_ID_FOUND;
+  END IF;
+
+  IF v_nr_stele_cazare <= 3 THEN
+    CLOSE v_cursor;
+    RAISE TOO_FEW_STARS;
+  END IF;
+
+  CLOSE v_cursor;
+    
+  RETURN 'Detalii pachet de vacanta ID ' || v_id_pachet || ':' || CHR(10) || 
+  'Destinatie: ' || v_destinatie || CHR(10) || 
+  'Cazare: ' || v_denumire_cazare || ' - ' || v_nr_stele_cazare || ' stele' || CHR(10) || 
+  'Adresa: ' || v_tara || ', ' || v_oras || ', ' || v_strada || ' ' || v_numar;
+
+  EXCEPTION
+    WHEN NO_ID_FOUND THEN
+      RETURN 'Nu s-a gasit niciun pachet de vacanta pentru ID-ul specificat.';
+    WHEN TOO_FEW_STARS THEN
+      RETURN'S-a gasit pachetul, dar cazarea are 3 sau mai putine stele!';
+    WHEN OTHERS THEN
+      RETURN 'O eroare necunoscuta a aparut.';
+END detalii_pachet_vacanta;
+
+-- PROBLEMA 9
+  PROCEDURE detalii_pachet_vacanta_angajati(id_pachet_param IN NUMBER) AS
+    TYPE EmpList IS TABLE OF NUMBER;
+  v_id_pachet PACHET_VACANTA.id_pachetvac%TYPE;
+  v_destinatie PACHET_VACANTA.destinatie%TYPE;
+  v_denumire_cazare CAZARE.denumire%TYPE;
+  v_nr_stele_cazare CAZARE.nr_stele%TYPE;
+  v_tara ADRESA.tara%TYPE;
+  v_oras ADRESA.oras%TYPE;
+  v_strada ADRESA.strada%TYPE;
+  v_numar ADRESA.numar%TYPE;
+  v_displayed_emp EmpList := EmpList(); -- Nested table pentru a contoriza angajatii
+
+BEGIN
+  -- Initializare variabile pentru detalii pachet
+  v_id_pachet := NULL;
+  v_destinatie := NULL;
+  v_denumire_cazare := NULL;
+  v_nr_stele_cazare := NULL;
+  v_tara := NULL;
+  v_oras := NULL;
+  v_strada := NULL;
+  v_numar := NULL;
+
+  -- Utilizăm cele cinci tabele într-o singură comandă SQL
+  FOR rec IN (
+    SELECT pv.id_pachetvac, pv.destinatie, c.denumire, c.nr_stele, a.tara, a.oras, a.strada, a.numar, ang.id_angajat, ang.nume, ang.prenume
+    FROM PACHET_VACANTA pv
+    JOIN CAZARE c ON pv.id_cazare = c.id_cazare
+    JOIN ADRESA a ON c.id_adresa = a.id_adresa
+    JOIN REZERVARE r ON pv.id_pachetvac = r.id_pachetvac
+    JOIN ANGAJAT ang ON r.id_angajat = ang.id_angajat
+    WHERE pv.id_pachetvac = id_pachet_param
+    ORDER BY ang.id_angajat 
+  ) LOOP
+    -- Afișăm detalii despre pachet doar o singură dată
+    IF v_id_pachet IS NULL THEN
+      v_id_pachet := rec.id_pachetvac;
+      v_destinatie := rec.destinatie;
+      v_denumire_cazare := rec.denumire;
+      v_nr_stele_cazare := rec.nr_stele;
+      v_tara := rec.tara;
+      v_oras := rec.oras;
+      v_strada := rec.strada;
+      v_numar := rec.numar;
+
+      DBMS_OUTPUT.PUT_LINE('Detalii pachet de vacanta ID ' || v_id_pachet || ':');
+      DBMS_OUTPUT.PUT_LINE('Destinatie: ' || v_destinatie);
+      DBMS_OUTPUT.PUT_LINE('Cazare: ' || v_denumire_cazare || ' - ' || v_nr_stele_cazare || ' stele');
+      DBMS_OUTPUT.PUT_LINE('Adresa: ' || v_tara || ', ' || v_oras || ', ' || v_strada || ' ' || v_numar || CHR(10));
+      DBMS_OUTPUT.PUT_LINE('Angajatii care au efectuat rezervari cu pachetul de vacanta ID ' || v_id_pachet || ':');
+    END IF;
+
+    -- Afișăm informațiile despre angajat doar dacă nu a fost deja afișat
+    IF NOT v_displayed_emp.EXISTS(v_displayed_emp.LAST) OR v_displayed_emp(v_displayed_emp.LAST) <> rec.id_angajat THEN
+      DBMS_OUTPUT.PUT_LINE('Angajat ID ' || rec.id_angajat || ': ' || rec.nume || ' ' || rec.prenume);
+      v_displayed_emp.EXTEND; -- Extend the nested table
+      v_displayed_emp(v_displayed_emp.LAST) := rec.id_angajat; 
+    END IF;
+  END LOOP;
+
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    DBMS_OUTPUT.PUT_LINE('Nu s-au găsit detalii pentru pachetul de vacanță cu ID-ul specificat.');
+  WHEN TOO_MANY_ROWS THEN
+    DBMS_OUTPUT.PUT_LINE('Prea multe înregistrări găsite pentru pachetul de vacanță cu ID-ul specificat.');
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('O eroare necunoscută a apărut: ' || SQLERRM);
+END detalii_pachet_vacanta_angajati;
+
+END PACHET_TURISM;
+/
